@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef's Menu Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Chef's Menu Manager</h1>
+            <p>Restaurant Menu Management</p>
+        </header>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+        <section class="dashboard" id="home">
+            <h2>Menu Dashboard</h2>
+            <div class="menu-buttons">
+                <a href="#add-menu" class="menu-button">
+                    <span class="icon">+</span>
+                    Add Menu Item
+                </a>
+                <a href="#menu-items" class="menu-button">
+                    <span class="icon">☰</span>
+                    View Menu Items
+                </a>
+                <a href="#search-menu" class="menu-button">
+                    <span class="icon">⌕</span>
+                    Search &amp; Filter
+                </a>
+                <a href="#statistics" class="menu-button">
+                    <span class="icon">▣</span>
+                    Menu Statistics
+                </a>
+            </div>
+        </section>
+
+        <section class="screen" id="add-menu">
+            <h2>Add Menu Item</h2>
+            <form id="add-form" novalidate>
+                <label for="dish-name">Dish Name</label>
+                <input type="text" id="dish-name" name="dish-name" placeholder="Enter dish name" required maxlength="80">
+                <span class="error-msg" id="err-dish-name"></span>
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Enter dish description" required maxlength="300"></textarea>
+                <span class="error-msg" id="err-description"></span>
+
+                <label for="course">Course</label>
+                <select id="course" name="course" required>
+                    <option value="">Select course</option>
+                    <option value="starter">Starter</option>
+                    <option value="main-course">Main Course</option>
+                    <option value="dessert">Dessert</option>
+                </select>
+                <span class="error-msg" id="err-course"></span>
+
+                <label for="price">Price (R)</label>
+                <input type="number" id="price" name="price" placeholder="Enter price" min="0.01" step="0.01" required>
+                <span class="error-msg" id="err-price"></span>
+
+                <div class="form-buttons">
+                    <button type="submit" class="save-button">Save Item</button>
+                    <button type="reset" class="cancel-button">Cancel</button>
+                </div>
+            </form>
+            <a href="#home" class="back-button">Back to Dashboard</a>
+        </section>
+
+        <section class="screen" id="search-menu">
+            <h2>Search &amp; Filter</h2>
+            <div class="search-controls">
+                <label for="search">Search by name</label>
+                <input type="search" id="search" name="search" placeholder="Enter dish name" autocomplete="off">
+
+                <label for="filter-course">Filter by course</label>
+                <select id="filter-course">
+                    <option value="">All Courses</option>
+                    <option value="starter">Starter</option>
+                    <option value="main-course">Main Course</option>
+                    <option value="dessert">Dessert</option>
+                </select>
+
+                <div class="form-buttons">
+                    <button type="button" id="clear-filters" class="cancel-button">Clear Search / Filter</button>
+                </div>
+            </div>
+
+            <div id="search-results" class="menu-list"></div>
+            <p id="search-empty" class="empty-state hidden">No menu items match your search or filter.</p>
+
+            <a href="#home" class="back-button">Back to Dashboard</a>
+        </section>
+
+        <section class="screen" id="menu-items">
+            <div class="section-heading">
+                <h2>Menu Items</h2>
+                <a href="#add-menu" class="small-add-button">+ Add Item</a>
+            </div>
+            <div id="menu-list" class="menu-list"></div>
+            <p id="menu-empty" class="empty-state hidden">No menu items yet. Add your first dish!</p>
+            <a href="#home" class="back-button">Back to Dashboard</a>
+        </section>
+
+        <section class="screen" id="edit-item">
+            <h2>Edit Menu Item</h2>
+            <form id="edit-form" novalidate>
+                <input type="hidden" id="edit-id">
+                <label for="edit-name">Dish Name</label>
+                <input type="text" id="edit-name" name="edit-name" required maxlength="80">
+                <span class="error-msg" id="err-edit-name"></span>
+                <label for="edit-description">Description</label>
+                <textarea id="edit-description" name="edit-description" required maxlength="300"></textarea>
+                <span class="error-msg" id="err-edit-description"></span>
+                <label for="edit-course">Course</label>
+                <select id="edit-course" name="edit-course" required>
+                    <option value="starter">Starter</option>
+                    <option value="main-course">Main Course</option>
+                    <option value="dessert">Dessert</option>
+                </select>
+                <span class="error-msg" id="err-edit-course"></span>
+
+                <label for="edit-price">Price (R)</label>
+                <input type="number" id="edit-price" name="edit-price" min="0.01" step="0.01" required>
+                <span class="error-msg" id="err-edit-price"></span>
+
+                <div class="form-buttons">
+                    <button type="submit" class="save-button">Update Item</button>
+                    <a href="#menu-items" class="cancel-button cancel-link">Cancel</a>
+                </div>
+            </form>
+            <a href="#menu-items" class="back-button">Back to Menu</a>
+        </section>
+
+        <section class="screen" id="delete-item">
+            <h2>Delete Item</h2>
+            <div class="delete-box">
+                <h3>Confirm Deletion</h3>
+                <p>Are you sure you want to delete:</p>
+                <strong id="delete-item-name">—</strong>
+                <p>This action cannot be undone.</p>
+                <div class="form-buttons">
+                    <button type="button" id="confirm-delete" class="delete-confirm-button">Delete</button>
+                    <a href="#menu-items" class="cancel-link">Cancel</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="screen" id="statistics">
+            <h2>Menu Statistics</h2>
+            <div class="statistics-grid">
+                <div class="stat-card">
+                    <h3 id="stat-total">0</h3>
+                    <p>Total Menu Items</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-average">R 0.00</h3>
+                    <p>Average Price</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-starters">0</h3>
+                    <p>Starters</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-mains">0</h3>
+                    <p>Main Courses</p>
+                </div>
+                <div class="stat-card full-width">
+                    <h3 id="stat-desserts">0</h3>
+                    <p>Desserts</p>
+                </div>
+            </div>
+            <a href="#home" class="back-button">Back to Dashboard</a>
+        </section>
+
+        <footer>
+            <p>Chef's Menu Manager</p>
+            <p>Restaurant Menu Management Application</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
